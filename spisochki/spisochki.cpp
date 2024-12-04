@@ -86,6 +86,23 @@ struct Spisok {
 		head = cur;
 	}
 
+	int remove(int ind) {
+		Elements* cur;
+		int i = 0;
+		for (cur = head; cur != nullptr; cur = cur->next) {
+			if (i == ind - 1) {
+				break;
+			}
+			i++;
+		}
+		if (cur == nullptr) return ~0;
+		if (cur->next == nullptr) pop_back();
+
+		Elements* newEl = cur->next->next;
+		delete cur->next;
+		cur->next = newEl;
+	}
+
 	void print() {
 		for (Elements* cur = head; cur != nullptr; cur = cur->next) {
 			std::cout << cur->value << "\n";
@@ -113,6 +130,9 @@ int main() {
 	a.push_back(21);
 	a.push_front(1);
 	a.insert(1, 10);
+	a.print();
+	std::cout << "Удалить элемент по индексу 1\n";
+	a.remove(1);
 	a.print();
 	return 0;
 }
