@@ -9,6 +9,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "dve_svyazi_spisok", "dve_sv
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "zmeika", "zmeika\zmeika.vcxproj", "{CF9D4423-75C4-4735-83E9-59FD972BA580}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "set", "set\set.vcxproj", "{60815238-ED86-41FB-AF54-90EBB3C22E4C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -41,6 +43,14 @@ Global
 		{CF9D4423-75C4-4735-83E9-59FD972BA580}.Release|x64.Build.0 = Release|x64
 		{CF9D4423-75C4-4735-83E9-59FD972BA580}.Release|x86.ActiveCfg = Release|Win32
 		{CF9D4423-75C4-4735-83E9-59FD972BA580}.Release|x86.Build.0 = Release|Win32
+		{60815238-ED86-41FB-AF54-90EBB3C22E4C}.Debug|x64.ActiveCfg = Debug|x64
+		{60815238-ED86-41FB-AF54-90EBB3C22E4C}.Debug|x64.Build.0 = Debug|x64
+		{60815238-ED86-41FB-AF54-90EBB3C22E4C}.Debug|x86.ActiveCfg = Debug|Win32
+		{60815238-ED86-41FB-AF54-90EBB3C22E4C}.Debug|x86.Build.0 = Debug|Win32
+		{60815238-ED86-41FB-AF54-90EBB3C22E4C}.Release|x64.ActiveCfg = Release|x64
+		{60815238-ED86-41FB-AF54-90EBB3C22E4C}.Release|x64.Build.0 = Release|x64
+		{60815238-ED86-41FB-AF54-90EBB3C22E4C}.Release|x86.ActiveCfg = Release|Win32
+		{60815238-ED86-41FB-AF54-90EBB3C22E4C}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
