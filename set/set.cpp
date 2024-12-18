@@ -1,5 +1,6 @@
 ﻿#include <iostream>
 #include <queue>
+#include <stdexcept>
 
 
 struct SetElement {
@@ -57,11 +58,12 @@ struct IntSet {
                     }
                 }
                 else {
-                    break;
+                    throw std::logic_error("Уже есть такое");
                 }
             }
         }
     }
+
     void print() {
         std::queue<SetElement*> q;
         q.push(root);
@@ -94,8 +96,6 @@ struct IntSet {
                                cur->value = vrem->value;
                                cur = vrem;
                                cur = nullptr;
-                                    }
-                                }
                             }
                         }
                     }
@@ -113,26 +113,38 @@ struct IntSet {
                 }
             }
         }
-        }
+     }
 };
 
 int main()
 {
     setlocale(LC_ALL, "");
     IntSet a;
+
+    try {
     a.add(1);
     a.add(5);
     a.add(0);
     a.add(7);
-    a.add(1);
     a.add(8);
     a.add(-2);
     a.add(3);
     a.add(-1);
+    std::cout << "Все значенгия множества: \n";
     a.print();
-    int n;
+    std::cout << "\nДобавить 1\n";
+        a.add(1);
+    }
+    catch (std::logic_error & ex) {
+        std::cout << ex.what();
+    }
+    catch (...)
+    {
+
+    }
+/*
     std::cout << "\nЧто удалить?\n";
     std::cin >> n;
     a.remove(n);
-    a.print();
+*/
 }
