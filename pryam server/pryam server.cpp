@@ -77,7 +77,7 @@ int main()
         COORD a;
         int hod = 1;
         recv(client1, (char*)&data, sizeof(Data), 0);
-        send(client1, (char*)&hod, )
+        send(client1, (char*)&hod, sizeof(int), 0);
         send(client2, (char*)&data, sizeof(int), 0);
         recv(client2, (char*)&data, sizeof(Data), 0);
     }

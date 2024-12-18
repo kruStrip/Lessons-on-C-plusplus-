@@ -216,7 +216,7 @@ int main()
                 data.move_korabliki(k);
             }
             send(sock, (char*)&data, sizeof(Data), 0);
-            recv(hod, (char*)&hod, sizeof(int), 0);
+            recv(sock, (char*)&hod, sizeof(int), 0);
             while (hod == 1) {
                 scanf("%c %c", &x, &y);
             }
