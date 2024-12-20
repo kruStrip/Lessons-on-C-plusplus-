@@ -1,6 +1,7 @@
 ﻿#define WIN32_LEAN_AND_MEAN
 #pragma comment(lib, "ws2_32.lib")
 #define _WINSOCK_DEPRECATED_NO_WARNINGS
+#define c(x) (char*)&x, sizeof(x)
 
 #include <iostream>
 #include <winsock2.h>
@@ -8,6 +9,7 @@
 #include <conio.h>
 #include <list>
 #include <vector>
+#include <string>
 #define N 10
 
 HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE); //возвращает
@@ -28,6 +30,10 @@ void getKey(Data* korabl);
 struct Data {
     char data[10][10];
     int player;
+    std::string hod;
+    std::string status;
+    int y;
+    char x;
 
     Direction direction;
     std::list<COORD> k1;
@@ -37,13 +43,15 @@ struct Data {
 
     std::vector<std::list<COORD>*> korabliki;
 
-    Data(int playerId) {
+    Data(int playerId, std::string hodServ, std::string statusServ) {
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
                 data[i][j] = 0;
             }
         }
         player = playerId;
+        hod = hodServ;
+        status = statusServ;
         direction = Direction::none;
         k1 = { { 25, 2 } };
         k2 = { {30, 2}, {30, 3 } };
@@ -52,8 +60,8 @@ struct Data {
         korabliki = { &k1, &k2, &k3, &k4 };
     }
 
-    void output() {
-        SetConsoleCursorPosition(console, {0,0});
+    void output(COORD xy) {
+        SetConsoleCursorPosition(console, xy);
         std::cout << " ";
         for (int i = 0; i < N; i++) {
             std::cout << ' '<<i;
@@ -82,6 +90,8 @@ struct Data {
                 }
             }
             printf("\n");
+            xy.Y++;
+            SetConsoleCursorPosition(console, xy);
         }
     }
 
@@ -92,7 +102,7 @@ struct Data {
         }
     }
 
-    void move_korabliki(std::list<COORD> *k) {
+    void move_korabliki(std::list<COORD> *k, COORD xy) {
         while (true) {
             getKey(this);
             if (direction == Direction::space) {
@@ -129,7 +139,7 @@ struct Data {
                 }
             }
             direction = Direction::none;
-            output();
+            output(xy);
             for (std::list<COORD>* kor : korabliki) {
                 output_korabli(*kor);
             }
@@ -159,6 +169,7 @@ void getKey(Data* korabl) {
 
 int main()
 {
+    setlocale(0, "");
     WSADATA d;
     WORD version = MAKEWORD(2, 2);
 
@@ -196,30 +207,48 @@ int main()
     }
 
     int playerId;
+    std::string hodServ;
+    std::string statusServ;
     recv(sock, (char*)&playerId, sizeof(Data), 0);
-
     std::cout << "This is player #" << playerId << std::endl;
+    recv(sock, c(statusServ), 0);
+
 
     {
         //send(sock, (char*)&data, sizeof(Data), 0);
             system("cls");
-
-            Data data(playerId);
-            data.output();
-            int hod = 0;
-            int x;
-            char y;
+            recv(sock, c(hodServ), 0);
+            Data data(playerId, hodServ, statusServ);
+            COORD xy = {0,0};
+            data.output(xy);
             for (std::list<COORD>* k : data.korabliki) {
                 data.output_korabli(*k);
             }
             for (std::list<COORD>* k : data.korabliki) {
-                data.move_korabliki(k);
+                data.move_korabliki(k, xy);
             }
+            data.status = "Готов";
             send(sock, (char*)&data, sizeof(Data), 0);
-            recv(sock, (char*)&hod, sizeof(int), 0);
-            while (hod == 1) {
-                scanf("%c %c", &x, &y);
+            while (data.status != "Игра!") {
+                Sleep(300);
+                recv(sock, c(data.status), 0);
             }
+            xy = { 30,0 };
+            char x;
+            int y;
+            data.output(xy);
+            while (data.status != "Победа" || data.status != "Поражение") {
+                if(data.hod == "Можна ходить") {
+                    printf("Введите координаты: ");
+                    scanf_s("%c %d", &x, &y);
+                }
+                else {
+                    Sleep(300);
+                    recv(sock, c(data.status), 0);
+                    recv(sock, c(data.hod), 0);
+                }
+            }
+            
     }
 
     closesocket(sock);

@@ -1,14 +1,28 @@
 ﻿#define WIN32_LEAN_AND_MEAN
 #pragma comment(lib, "ws2_32.lib")
 #define _WINSOCK_DEPRECATED_NO_WARNINGS
+#define c(x) (char*)&x, sizeof(x)
 
 #include <iostream>
 #include <winsock2.h>
 #include <windows.h>
+#include <string>
 
-struct Data {
+struct Data_cl1 {
     char data[10][10];
     int player;
+    std::string hod;
+    std::string status;
+    int y;
+    char x;
+};
+struct Data_cl2 {
+    char data[10][10];
+    int player;
+    std::string hod;
+    std::string status;
+    int y;
+    char x;
 };
 
 /// <summary>
@@ -72,14 +86,51 @@ int main()
 
     std::cout << "Client 2 connected\n";
 
+    std::string status = "Wait";
+    send(client1, c(status), 0);
+    send(client2, c(status), 0);
     {
-        Data data{};
+        Data_cl1 data_cl1{};
+        Data_cl2 data_cl2{};
         COORD a;
-        int hod = 1;
-        recv(client1, (char*)&data, sizeof(Data), 0);
-        send(client1, (char*)&hod, sizeof(int), 0);
-        send(client2, (char*)&data, sizeof(int), 0);
-        recv(client2, (char*)&data, sizeof(Data), 0);
+        std::string hod = "Можна ходить";
+        send(client1, c(hod), 0);
+        hod = "Незя ходить";
+        send(client2, c(hod), 0);
+        recv(client1, (char*)&data_cl1, sizeof(Data_cl1), 0);
+        recv(client2, (char*)&data_cl2, sizeof(Data_cl2), 0);
+
+        while ((data_cl1.status != "Готов") && (data_cl2.status != "Готов")) {
+            Sleep(300);
+            recv(client1, c(data_cl1.status), 0);
+            recv(client2, c(data_cl2.status), 0);
+        }
+
+        data_cl1.status = "Игра!";
+        data_cl2.status = "Игра!";
+        send(client1, c(data_cl1.status), 0);
+        send(client2, c(data_cl2.status), 0);
+
+        while (data_cl1.status != "Победа" || data_cl1.status != "Поражение") {
+            if (data_cl1.hod == "Походил") {
+                data_cl1.hod = "Незя ходить";
+                data_cl2.hod = "Можна ходить";
+                send(client1, c(data_cl1.hod), 0);
+                send(client2, c(data_cl2.hod), 0);
+            }
+            else if (data_cl2.hod == "Походил") {
+                data_cl2.hod = "Незя ходить";
+                data_cl1.hod = "Можна ходить";
+                send(client2, c(data_cl2.hod), 0);
+                send(client1, c(data_cl1.hod), 0);
+                recv(client1, c(data_cl1.status), 0);
+            }
+            else {
+                Sleep(300);
+                recv(client2, c(data_cl2.hod), 0);
+                recv(client1, c(data_cl1.hod), 0);
+            }
+        }
     }
     closesocket(sock);
 
