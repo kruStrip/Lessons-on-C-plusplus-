@@ -21,6 +21,7 @@ public:
 		std::cout << "Список клиентов:\n";
 		for (auto& i : clients) {
 			std::cout << "ФИО клиента: "<< i.first<< "\nДата покупки: "<< i.second;
+			std::cout << "\n";
 		}
 	}
 };
