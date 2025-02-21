@@ -57,9 +57,9 @@ public:
 	void Draw() {
 		pb->SetPen(PaintBox::Solid, 3, Color{ 252,15,192 });
 		pb->Draw<Figure::ELLIPSE>(20, 113, 80, 50);
-		pb->Draw<Figure::ELLIPSE>(140, 113, 70, 50);
+		pb->Draw<Figure::ELLIPSE>(145, 113, 80, 50);
 		pb->Draw<Figure::LINE>(25, 100, 100, 180);
-		pb->Draw<Figure::LINE>(140, 100, 100, 180);
+		pb->Draw<Figure::LINE>(137, 100, 100, 180);
 		pb->Update();
 	}
 	LRESULT OnPaint(HDC& hdc, PAINTSTRUCT& ps, WPARAM wp, LPARAM lp) override {
